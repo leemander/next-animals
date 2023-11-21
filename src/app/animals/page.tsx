@@ -1,5 +1,9 @@
 type petObj = { name: string; id: number };
+type petsSearchQuery = {
+  sortBy: string;
+};
 
+import { Petrona } from "next/font/google";
 import Link from "next/link";
 
 const pets: petObj[] = [
@@ -19,13 +23,45 @@ const pets: petObj[] = [
     name: "Tess",
     id: 3,
   },
+  {
+    name: "Nanuk",
+    id: 4,
+  },
+  {
+    name: "Rover",
+    id: 5,
+  },
 ];
 
-export default function Page() {
+function comparePets(a: petObj, b: petObj) {
+  if (a.name < b.name) {
+    return -1;
+  } else if (a.name > b.name) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+export default function Page({
+  searchParams,
+}: {
+  searchParams: petsSearchQuery;
+}) {
+  if (searchParams.sortBy === "asc") {
+    pets.sort(comparePets);
+  } else if (searchParams.sortBy === "desc") {
+    pets.sort(comparePets).reverse();
+  }
+
   return (
     <main>
       <h1>ANIMALS</h1>
       <section className="pets">
+        <nav className="flex underline gap-2 my-2 text-blue-400">
+          <Link href="/animals/?sortBy=asc">Sort A-Z</Link>
+          <Link href="/animals/?sortBy=desc">Sort Z-A</Link>
+        </nav>
         {pets.map((pet) => {
           return (
             <div className="my-4 text-orange-400 underline" key={pet.id}>
