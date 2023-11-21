@@ -3,7 +3,6 @@ type petsSearchQuery = {
   sortBy: string;
 };
 
-import { Petrona } from "next/font/google";
 import Link from "next/link";
 
 const pets: petObj[] = [
@@ -48,21 +47,24 @@ export default function Page({
 }: {
   searchParams: petsSearchQuery;
 }) {
-  if (searchParams.sortBy === "asc") {
-    pets.sort(comparePets);
-  } else if (searchParams.sortBy === "desc") {
-    pets.sort(comparePets).reverse();
+  let sortedPets = [...pets];
+
+  if (searchParams.sortBy == "asc") {
+    sortedPets.sort(comparePets);
+  } else if (searchParams.sortBy == "desc") {
+    sortedPets.sort(comparePets).reverse();
   }
 
   return (
     <main>
-      <h1>ANIMALS</h1>
+      <h1 className="text-4xl">ANIMALS</h1>
       <section className="pets">
-        <nav className="flex underline gap-2 my-2 text-blue-400">
+        <nav className="flex underline gap-2 my-2 text-blue-400 text-sm">
+          <Link href="/animals/">Remove Sorting</Link>
           <Link href="/animals/?sortBy=asc">Sort A-Z</Link>
           <Link href="/animals/?sortBy=desc">Sort Z-A</Link>
         </nav>
-        {pets.map((pet) => {
+        {sortedPets.map((pet) => {
           return (
             <div className="my-4 text-orange-400 underline" key={pet.id}>
               <Link href={`/animals/${pet.name.toLowerCase()}`}>
